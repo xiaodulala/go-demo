@@ -1,0 +1,1 @@
+{"level":"INFO","time":"2021-12-27T16:01:26+08:00","file":"/Users/duyong/mygithub/go-demo/cuslog/example/main.go:29","func":"main.main","message":"custom log with json formatter"}
