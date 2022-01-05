@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ws
+  labels:
+    name: ws
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJkb2NrZXIuaGdwYXJrLmNuIjp7InVzZXJuYW1lIjoiZHV5b25nIiwicGFzc3dvcmQiOiJDQU9uaW1hMTIzIiwiZW1haWwiOiJ0eWR1eW9uZ0AxNjMuY29tIiwiYXV0aCI6IlpIVjViMjVuT2tOQlQyNXBiV0V4TWpNPSJ9fX0=
+kind: Secret
+metadata:
+  creationTimestamp: "2022-01-05T02:29:51Z"
+  name: docker-harbor
+  namespace: ws
+type: kubernetes.io/dockerconfigjson
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ws
+  namespace: ws
+spec:
+  selector:
+    matchLabels:
+      app: ws
+  minReadySeconds: 10
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ws
+    spec:
+      containers:
+        - name: ws
+          image: docker.hgpark.cn/yftest/duyong/wssvc
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: docker-harbor
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ws
+  namespace: ws
+spec:
+  ports:
+    - name: http
+      port: 9099
+      targetPort: 9099
+      nodePort: 30090
+  selector:
+    app: ws
+  type: NodePort
+
+# 私有仓库需要创建secret资源。
+# 创建步骤:
+# 1. 创建命名空间
+# kubectl create ns ws
+# 2. 创建secret资源
+# kubectl create secret docker-registry docker-harbor --docker-server=docker.hgpark.cn --docker-username=duyong  --docker-password=CAOnima123 --docker-email=tyduyong@163.com --namespace=ws
+# 3. 导出后复制到pods资源文件
+# kubectl get secret docker-harbor -n ws --output=yaml
