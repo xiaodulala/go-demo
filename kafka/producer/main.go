@@ -26,7 +26,7 @@ type KafkaProducerOptions struct {
 
 var defaultKafkaProducerOptions KafkaProducerOptions = KafkaProducerOptions{
 	Addr:      ":9095",
-	Brokers:   "10.0.0.99:9092,10.0.0.100:9092,10.0.0.101:9092",
+	Brokers:   "10.0.0.247:9092,10.0.0.248:9092,10.0.0.230:9092",
 	Verbose:   false,
 	CertFile:  "",
 	KeyFile:   "",

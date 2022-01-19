@@ -25,10 +25,10 @@ type KafkaConsumerOptions struct {
 }
 
 var defaultKafkaConsumerOptions KafkaConsumerOptions = KafkaConsumerOptions{
-	Brokers:  "10.0.0.99:9092,10.0.0.100:9092,10.0.0.101:9092",
+	Brokers:  "10.0.0.247:9092,10.0.0.248:9092,10.0.0.230:9092",
 	Version:  "2.8.1",
 	Group:    "sql",
-	Topics:   "maxwell",
+	Topics:   "important,access_log",
 	Assignor: "range",
 	Oldest:   true,
 	Verbose:  false,
@@ -163,7 +163,7 @@ func (consumer *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, clai
 	// The `ConsumeClaim` itself is called within a goroutine, see:
 	// https://github.com/Shopify/sarama/blob/main/consumer_group.go#L27-L29
 	for message := range claim.Messages() {
-		log.Printf("Message claimed: value = %s, timestamp = %v, topic = %s", string(message.Value), message.Timestamp, message.Topic)
+		log.Printf("Message claimed: key = %s, value = %s, timestamp = %v, topic = %s", string(message.Key), string(message.Value), message.Timestamp, message.Topic)
 		session.MarkMessage(message, "")
 	}
 
