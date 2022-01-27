@@ -28,7 +28,7 @@ var defaultKafkaConsumerOptions KafkaConsumerOptions = KafkaConsumerOptions{
 	Brokers:  "10.0.0.247:9092,10.0.0.248:9092,10.0.0.230:9092",
 	Version:  "2.8.1",
 	Group:    "sql",
-	Topics:   "important,access_log",
+	Topics:   "important,access_log,maxwell",
 	Assignor: "range",
 	Oldest:   true,
 	Verbose:  false,
@@ -109,7 +109,7 @@ func main() {
 			// server-side rebalance happens, the consumer session will need to be
 			// recreated to get the new claims
 			if err := client.Consume(ctx, strings.Split(defaultKafkaConsumerOptions.Topics, ","), &consumer); err != nil {
-				log.Panicf("Error from consumer:%v", err)
+				fmt.Printf("Error from consumer:%v\n", err)
 			}
 
 			if ctx.Err() != nil {
